@@ -38,12 +38,12 @@ class TextformatterGDPR extends Textformatter implements Module {
 		if(wire('page')->rootParent->id == 2) return;
 
 		/**
-		 * @var HookGDPR $module
+		 * @var ConsentManagerGDPR $module
 		 *
 		 */
 		$module = $this->modules->get("ConsentManagerGDPR");
 
-		if($module->userHasDeniedConsent()) {
+		if($module->userHasDeniedConsent() || $module->userHasNotDecidedYet()) {
 			$str = $this->applyRules($str);
 		}
 	}

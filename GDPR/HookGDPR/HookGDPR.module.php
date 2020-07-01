@@ -32,14 +32,19 @@ class HookGDPR extends Wire implements Module {
 	}
 
 	public function init() {
-		$this->addHookBefore('PageRender::renderPage', $this, 'checkGDPR');
+		if($this->modules->isInstalled("ConsentModalGDPR")) {
+			$this->addHookAfter('PageRender::renderPage', $this, 'checkGDPRConsentAndInjectModal');
+		} else {
+			$this->addHookBefore('PageRender::renderPage', $this, 'checkGDPRConsentAndRedirect');
+		}
 	}
 
-	public function checkGDPR($event) {
+	public function checkGDPRConsentAndRedirect($event) {
 		if(wire('page')->rootParent->id == 2) return;
 
 		/**
 		 * @var ConfigureGDPR $configuration
+		 * @var ConsentManagerGDPR $consent
 		 *
 		 */
 		$configuration = $this->modules->get("ConfigureGDPR");
@@ -48,11 +53,43 @@ class HookGDPR extends Wire implements Module {
 		$page = $configuration->getGDPRPage();
 		if(wire('page')->id == $page->id) return;
 
-		if(!$consent->userHasGivenConsent() && !$consent->userHasDeniedConsent()) {
+		if($consent->userHasNotDecidedYet()) {
 			wire('session')->redirect(
 				$page->url . "?redirect=" . urlencode($this->page->url),
 				false
 			);
 		}
 	}
+
+
+	public function checkGDPRConsentAndInjectModal($event) {
+		if(wire('page')->rootParent->id == 2) return;
+
+		/**
+		 * @var ConfigureGDPR $configuration
+		 * @var ConsentManagerGDPR $consent
+		 * @var ConsentModalGDPR $module
+		 *
+		 */
+		$configuration = $this->modules->get("ConfigureGDPR");
+		$consent = $this->modules->get("ConsentManagerGDPR");
+		$module = wire()->modules->get("ConsentModalGDPR");
+
+
+		$page = $configuration->getGDPRPage();
+		if(wire('page')->id == $page->id) return;
+
+		if($consent->userHasNotDecidedYet()) {
+
+			$output = str_replace("</body>", $module->render() . "</body>", $event->arguments()[0]->data("return"));
+			$event->arguments()[0]->return = $output;
+			/*
+			wire('session')->redirect(
+				$page->url . "?redirect=" . urlencode($this->page->url),
+				false
+			);*/
+		}
+	}
+
+
 }

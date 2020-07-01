@@ -78,7 +78,7 @@ class ConsentFormsGDPR extends Wire implements Module {
 	private function getGDPRModule() {
 
 		/**
-		 * @var HookGDPR $module
+		 * @var ConsentManagerGDPR $module
 		 *
 		 */
 		$module = $this->modules->get("ConsentManagerGDPR");

@@ -1,30 +1,30 @@
-<div class="gdprform">
+<div class="gdpr-form">
 
 	<?= $text ?>
 
-    <form class="accept-form">
-        <input type="hidden" name="redirect" value="<?= $url ?>">
-        <input type="hidden" name="enableBlocking" value="1">
-        <input type="submit" class="gdpr-submit" value="<?=$optOut?>">
-    </form>
-    <form class="deny-form">
-        <input type="hidden" name="redirect" value="<?= $url ?>">
-        <input type="hidden" name="disableBlocking" value="1">
-        <input type="submit" class="gdpr-submit" value="<?=$optIn?>">
-    </form>
+    <div class="center">
+        <form class="accept-form">
+            <input type="hidden" name="redirect" value="<?= $url ?>">
+            <input type="hidden" name="enableBlocking" value="1">
+            <input type="submit" class="gdpr-submit" value="<?= $optOut ?>">
+        </form>
+        <form class="deny-form">
+            <input type="hidden" name="redirect" value="<?= $url ?>">
+            <input type="hidden" name="disableBlocking" value="1">
+            <input type="submit" class="gdpr-submit" value="<?= $optIn ?>">
+        </form>
+    </div>
 </div>
 
 <style>
-    .gdprform .accept-form,
-    .gdprform .deny-form {
-        float: left;
-        width: 50%;
+    .gdpr-form .accept-form,
+    .gdpr-form .deny-form {
+        display: inline;
         padding: 15px;
     }
 
-    .gdprform .accept-form .gdpr-submit,
-    .gdprform .deny-form .gdpr-submit {
-        width: 100%;
+    .gdpr-form .accept-form .gdpr-submit,
+    .gdpr-form .deny-form .gdpr-submit {
         padding: 15px;
         background: none;
         box-shadow: none;
@@ -33,11 +33,16 @@
         cursor: pointer;
         color: white;
     }
-    .gdprform .accept-form .gdpr-submit {
+
+    .gdpr-form .accept-form .gdpr-submit {
         background: #4cd137;
     }
 
-    .gdprform .deny-form .gdpr-submit {
+    .gdpr-form .deny-form .gdpr-submit {
         background: #e84118;
+    }
+
+    .gdpr-form .center{
+        text-align: center;
     }
 </style>

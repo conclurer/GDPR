@@ -24,6 +24,7 @@ class ConfigureGDPR extends WireData implements ConfigurableModule, Module {
 			'summary'  => __('This module provides the settings for HookGDPR and TextformatterGDPR', __FILE__),
 			'author'   => 'Tomas Kostadinov / Conclurer GmbH',
 			'href'     => 'https://conclurer.com',
+			'autoload' => true,
 			'installs' => ["ConsentManagerGDPR", "HookGDPR", "TextformatterGDPR", "ConsentFormsGDPR"],
 		];
 	}
@@ -39,16 +40,14 @@ class ConfigureGDPR extends WireData implements ConfigurableModule, Module {
 		"selectGDPRPage"           => "1",
 		"defaultOptInStyle"        => "
 <style>
-    .gdprform .accept-form,
-    .gdprform .deny-form {
-        float: left;
-        width: 50%;
+    .gdpr-form .accept-form,
+    .gdpr-form .deny-form {
+        display: inline;
         padding: 15px;
     }
 
-    .gdprform .accept-form .gdpr-submit,
-    .gdprform .deny-form .gdpr-submit {
-        width: 100%;
+    .gdpr-form .accept-form .gdpr-submit,
+    .gdpr-form .deny-form .gdpr-submit {
         padding: 15px;
         background: none;
         box-shadow: none;
@@ -57,12 +56,17 @@ class ConfigureGDPR extends WireData implements ConfigurableModule, Module {
         cursor: pointer;
         color: white;
     }
-    .gdprform .accept-form .gdpr-submit {
+
+    .gdpr-form .accept-form .gdpr-submit {
         background: #4cd137;
     }
 
-    .gdprform .deny-form .gdpr-submit {
+    .gdpr-form .deny-form .gdpr-submit {
         background: #e84118;
+    }
+
+    .gdpr-form .center{
+        text-align: center;
     }
 </style>",
 	];
@@ -128,7 +132,6 @@ class ConfigureGDPR extends WireData implements ConfigurableModule, Module {
 		 * Blocking Settings
 		 *
 		 *********************************/
-
 
 		$data = $this->loadData($data);
 		/**
@@ -272,7 +275,7 @@ class ConfigureGDPR extends WireData implements ConfigurableModule, Module {
 	}
 
 	public function getDisabledText() {
-		$data = $this->loadData($this->config());
+		$data = $this->loadData($this->data);
 
 		return $data["defaultContentHiddenText"];
 	}

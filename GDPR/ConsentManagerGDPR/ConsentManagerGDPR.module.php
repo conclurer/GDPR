@@ -36,14 +36,35 @@ class ConsentManagerGDPR extends Wire implements Module {
 		return $this->input->cookie->get("gdprBlockingDisabled") != null;
 	}
 
+	public function userHasNotDecidedYet() {
+		return !$this->userHasGivenConsent() && !$this->userHasDeniedConsent();
+	}
+
 	public function enableGDPRBlocking() {
-		$this->input->cookie->set('gdprBlockingEnabled', 'Please don`t look here', ['age' => 86400 * 365, 'path' => '/']);
+		$this->input->cookie->set('gdprBlockingEnabled', 'Please don not look here', ['age' => 86400 * 365, 'path' => '/']);
 		$this->input->cookie->remove('gdprBlockingDisabled');
 	}
 
 	public function disableGDPRBlocking() {
 		$this->input->cookie->remove('gdprBlockingEnable');
-		$this->input->cookie->set('gdprBlockingDisabled', 'Please don`t look here', ['age' => 86400 * 365, 'path' => '/']);
+		$this->input->cookie->set('gdprBlockingDisabled', 'Please don not look here', ['age' => 86400 * 365, 'path' => '/']);
+	}
+
+	public function consent($true, $false = "") {
+		if($this->userHasGivenConsent()) {
+			return $true;
+		} else {
+			if($false == "") {
+				/**
+				 * @var ConfigureGDPR $configuration
+				 *
+				 */
+				$configuration = $this->modules->get("ConfigureGDPR");
+
+				$false = '<div class="gdpr-message">' . $configuration->getDisabledText() . "</div>";
+			}
+			return $false;
+		}
 	}
 
 }

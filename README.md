@@ -17,3 +17,8 @@ This module allows ProcessWire Websites to be compliant with the 🇪🇺 EU GDP
 1. Install all found Modules - installing the `ConfigureGDPR` Module should automatically install all other modules
 1. Click on the settings button of `ConfigureGDPR` to  configure all modules
 1. Follow the steps described under `Usage` to complete the setup 
+
+# Screenshots
+
+![Screenshot 1](https://raw.githubusercontent.com/conclurer/GDPR/master/screenshot1.png "Screenshot 1")
+![Screenshot 2](https://raw.githubusercontent.com/conclurer/GDPR/master/screenshot2.png "Screenshot 2")
