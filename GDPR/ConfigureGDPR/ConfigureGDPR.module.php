@@ -194,7 +194,6 @@ class ConfigureGDPR extends WireData implements ConfigurableModule, Module {
 		$f = wire('modules')->get('InputfieldTextarea');
 		$f->name = 'styles';
 		$f->label = 'Styling';
-		$f->useLanguages = true;
 		$f->description = "Default is " . self::$configDefaults["styles"];
 		$f->attr('value', $data["styles"]);
 		$fieldsetSettings->add($f);
@@ -309,8 +308,6 @@ class ConfigureGDPR extends WireData implements ConfigurableModule, Module {
 			$f->name = 'defaultModalStyle';
 			$f->label = 'Styling for the Modal';
 			$f->attr('value', $data["defaultModalStyle"]);
-			$fieldsetOpt->add($f);
-
 
 			$fieldsetModal->add($f);
 			$inputFields->add($fieldsetModal);

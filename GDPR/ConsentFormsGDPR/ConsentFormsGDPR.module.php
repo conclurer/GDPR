@@ -74,6 +74,7 @@ class ConsentFormsGDPR extends Wire implements Module {
 		$tpl->optOut = $this->tryToGetLanguageValue("defaultOptIn");
 		$tpl->optIn = $this->tryToGetLanguageValue("defaultOptOut");
 		$tpl->style = $this->tryToGetLanguageValue("defaultOptInStyle");
+
 		if(isset($this->input->get->redirect)) {
 			$url = urldecode($this->input->get->redirect);
 			$tpl->url = urlencode($this->sanitizer->url($url));

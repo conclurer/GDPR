@@ -16,33 +16,4 @@
     </div>
 </div>
 
-<style>
-    .gdpr-form .accept-form,
-    .gdpr-form .deny-form {
-        display: inline;
-        padding: 15px;
-    }
-
-    .gdpr-form .accept-form .gdpr-submit,
-    .gdpr-form .deny-form .gdpr-submit {
-        padding: 15px;
-        background: none;
-        box-shadow: none;
-        border-radius: 0;
-        border: 0;
-        cursor: pointer;
-        color: white;
-    }
-
-    .gdpr-form .accept-form .gdpr-submit {
-        background: #4cd137;
-    }
-
-    .gdpr-form .deny-form .gdpr-submit {
-        background: #e84118;
-    }
-
-    .gdpr-form .center{
-        text-align: center;
-    }
-</style>
+<?=$style?>
