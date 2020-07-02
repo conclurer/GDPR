@@ -69,6 +69,30 @@ class ConfigureGDPR extends WireData implements ConfigurableModule, Module {
         text-align: center;
     }
 </style>",
+		"defaultModalStyle"        => "<style>
+    .modal {
+        position: fixed;
+        z-index: 10000;
+        padding-top: 100px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(0.8);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+</style>",
 	];
 
 
@@ -108,6 +132,11 @@ class ConfigureGDPR extends WireData implements ConfigurableModule, Module {
 		$fieldsetTest->icon = "question";
 		$fieldsetTest->label = "Test the configuration";
 		$fieldsetTest->collapsed = InputfieldFieldset::collapsedYes;
+
+		$fieldsetModal = new InputfieldFieldset();
+		$fieldsetModal->icon = "object-group";
+		$fieldsetModal->label = "Modal Configuration";
+		$fieldsetModal->collapsed = InputfieldFieldset::collapsedYes;
 
 
 		/*********************************
@@ -153,17 +182,19 @@ class ConfigureGDPR extends WireData implements ConfigurableModule, Module {
 		$f = wire('modules')->get('InputfieldCKEditor');
 		$f->name = 'defaultContentHiddenText';
 		$f->label = 'Content Filtered Notice';
+		$f->useLanguages = true;
 		$f->description = "\"This content has been blocked\" - Text";
 		$f->attr('value', $data["defaultContentHiddenText"]);
 		$fieldsetSettings->add($f);
 
 		/**
-		 * @var InputfieldText $f
+		 * @var InputfieldTextarea $f
 		 *
 		 */
 		$f = wire('modules')->get('InputfieldTextarea');
 		$f->name = 'styles';
 		$f->label = 'Styling';
+		$f->useLanguages = true;
 		$f->description = "Default is " . self::$configDefaults["styles"];
 		$f->attr('value', $data["styles"]);
 		$fieldsetSettings->add($f);
@@ -188,23 +219,13 @@ class ConfigureGDPR extends WireData implements ConfigurableModule, Module {
 		 *********************************/
 
 		/**
-		 * @var InputfieldMarkup $f
-		 *
-		 */
-
-		$f = wire('modules')->get('InputfieldMarkup');
-		$f->label = 'Output file';
-		$f->notes = '';
-		$f->detail = "Original was: " . $f->detail;
-		$fieldsetTest->add($f);
-
-		/**
 		 * @var InputfieldCKEditor $f
 		 *
 		 */
 		$f = wire('modules')->get('InputfieldCKEditor');
 		$f->name = 'defaultOptText';
 		$f->label = 'Opt-In / Opt-Out Text';
+		$f->useLanguages = true;
 		$f->description = "This page will be shown on the opt-in page.";
 		$f->attr('value', $data["defaultOptText"]);
 		$fieldsetOpt->add($f);
@@ -216,6 +237,7 @@ class ConfigureGDPR extends WireData implements ConfigurableModule, Module {
 		$f = wire('modules')->get('InputfieldText');
 		$f->name = 'defaultOptIn';
 		$f->label = 'Opt-In button Label';
+		$f->useLanguages = true;
 		$f->description = "This is the label of the opt-in button";
 		$f->columnWidth = 50;
 		$f->attr('value', $data["defaultOptIn"]);
@@ -228,6 +250,7 @@ class ConfigureGDPR extends WireData implements ConfigurableModule, Module {
 		$f = wire('modules')->get('InputfieldText');
 		$f->name = 'defaultOptOut';
 		$f->label = 'Opt-In button Label';
+		$f->useLanguages = true;
 		$f->description = "This is the label of the opt-in button";
 		$f->columnWidth = 50;
 		$f->attr('value', $data["defaultOptOut"]);
@@ -235,7 +258,7 @@ class ConfigureGDPR extends WireData implements ConfigurableModule, Module {
 
 
 		/**
-		 * @var InputfieldText $f
+		 * @var InputfieldTextarea $f
 		 *
 		 */
 		$f = wire('modules')->get('InputfieldTextarea');
@@ -264,11 +287,35 @@ class ConfigureGDPR extends WireData implements ConfigurableModule, Module {
 		$f->description = $test;
 		$fieldsetTest->add($f);
 
-
 		$inputFields = new InputfieldWrapper();
+
 		$inputFields->add($fieldsetUsage);
 		$inputFields->add($fieldsetSettings);
 		$inputFields->add($fieldsetOpt);
+
+		/*********************************
+		 *
+		 * Optional Settings (Extensions like the modal)
+		 *
+		 *********************************/
+
+		if($this->modules->isInstalled("ConsentModalGDPR")) {
+
+			/**
+			 * @var InputfieldTextarea $f
+			 *
+			 */
+			$f = wire('modules')->get('InputfieldTextarea');
+			$f->name = 'defaultModalStyle';
+			$f->label = 'Styling for the Modal';
+			$f->attr('value', $data["defaultModalStyle"]);
+			$fieldsetOpt->add($f);
+
+
+			$fieldsetModal->add($f);
+			$inputFields->add($fieldsetModal);
+		}
+
 		$inputFields->add($fieldsetTest);
 
 		return $inputFields;

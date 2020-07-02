@@ -43,6 +43,16 @@ class ConsentFormsGDPR extends Wire implements Module {
 		return $d;
 	}
 
+	private function tryToGetLanguageValue($key) {
+		$data = $this->getConfig();
+		if(isset($data[$key . "__" . $this->user->language()->id])) {
+			if($data[$key . "__" . $this->user->language()->id] != "") {
+				return $data[$key . "__" . $this->user->language()->id];
+			}
+		}
+		return $data[$key];
+	}
+
 	public function render() {
 		if(isset($this->input->get->redirect)) {
 			if(isset($this->input->get->enableBlocking)) {
@@ -60,10 +70,10 @@ class ConsentFormsGDPR extends Wire implements Module {
 
 		$tpl = new TemplateFile(__DIR__ . '/templates/form.inc.php');
 
-		$tpl->text = $this->getConfig()["defaultOptText"];
-		$tpl->optOut = $this->getConfig()["defaultOptIn"];
-		$tpl->optIn = $this->getConfig()["defaultOptOut"];
-		$tpl->style = $this->getConfig()["defaultOptInStyle"];
+		$tpl->text = $this->tryToGetLanguageValue("defaultOptText");
+		$tpl->optOut = $this->tryToGetLanguageValue("defaultOptIn");
+		$tpl->optIn = $this->tryToGetLanguageValue("defaultOptOut");
+		$tpl->style = $this->tryToGetLanguageValue("defaultOptInStyle");
 		if(isset($this->input->get->redirect)) {
 			$url = urldecode($this->input->get->redirect);
 			$tpl->url = urlencode($this->sanitizer->url($url));

@@ -49,6 +49,7 @@ class ConsentModalGDPR extends ConsentFormsGDPR implements Module {
 		$tpl = new TemplateFile(__DIR__ . '/templates/modal.inc.php');
 
 		$tpl->content = $form;
+		$tpl->styling = $this->getConfig()["defaultModalStyle"];
 
 		return $tpl->render();
 	}

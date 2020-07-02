@@ -32,6 +32,7 @@ class HookGDPR extends Wire implements Module {
 	}
 
 	public function init() {
+
 		if($this->modules->isInstalled("ConsentModalGDPR")) {
 			$this->addHookAfter('PageRender::renderPage', $this, 'checkGDPRConsentAndInjectModal');
 		} else {
@@ -63,6 +64,7 @@ class HookGDPR extends Wire implements Module {
 
 
 	public function checkGDPRConsentAndInjectModal($event) {
+
 		if(wire('page')->rootParent->id == 2) return;
 
 		/**
