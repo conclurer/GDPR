@@ -45,14 +45,18 @@ class ConsentFormsGDPR extends Wire implements Module {
 
 	private function tryToGetLanguageValue($key) {
 		$data = $this->getConfig();
-		if(isset($data[$key . "__" . $this->user->language()->id])) {
-			if($data[$key . "__" . $this->user->language()->id] != "") {
-				return $data[$key . "__" . $this->user->language()->id];
+		try {
+			if(isset($data[$key . "__" . $this->user->language()->id])) {
+				if($data[$key . "__" . $this->user->language()->id] != "") {
+					return $data[$key . "__" . $this->user->language()->id];
+				}
 			}
+		} catch (WireException $exception) {
+			// do nothing
 		}
 		return $data[$key];
 	}
-
+	
 	public function render() {
 		if(isset($this->input->get->redirect)) {
 			if(isset($this->input->get->enableBlocking)) {
