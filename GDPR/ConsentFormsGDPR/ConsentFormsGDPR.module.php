@@ -20,7 +20,7 @@ class ConsentFormsGDPR extends Wire implements Module {
 	public static function getModuleInfo() {
 		return [
 			'title'    => 'ConsentForms for Conclurer\GDPR 🇪🇺',
-			'version'  => 1,
+			'version'  => 3,
 			'summary'  => __('This module provides opt-in and opt-out forms for Conclurer\GDPR', __FILE__),
 			'author'   => 'Tomas Kostadinov / Conclurer GmbH',
 			'href'     => 'https://conclurer.com',
