@@ -20,7 +20,7 @@ class ConsentFormsGDPR extends Wire implements Module {
 	public static function getModuleInfo() {
 		return [
 			'title'    => 'ConsentForms for Conclurer\GDPR 🇪🇺',
-			'version'  => 3,
+			'version'  => 2,
 			'summary'  => __('This module provides opt-in and opt-out forms for Conclurer\GDPR', __FILE__),
 			'author'   => 'Tomas Kostadinov / Conclurer GmbH',
 			'href'     => 'https://conclurer.com',
@@ -56,16 +56,15 @@ class ConsentFormsGDPR extends Wire implements Module {
 		}
 		return $data[$key];
 	}
-	
+
 	public function render() {
 		if(isset($this->input->get->redirect)) {
+			$module = $this->getGDPRModule();
 			if(isset($this->input->get->enableBlocking)) {
-				$module = $this->getGDPRModule();
 				$module->enableGDPRBlocking();
 				$this->redirectPage($this->input->get->redirect);
 			}
 			if(isset($this->input->get->disableBlocking)) {
-				$module = $this->getGDPRModule();
 				$module->disableGDPRBlocking();
 				$this->redirectPage($this->input->get->redirect);
 			}
@@ -83,7 +82,13 @@ class ConsentFormsGDPR extends Wire implements Module {
 			$url = urldecode($this->input->get->redirect);
 			$tpl->url = urlencode($this->sanitizer->url($url));
 		} else {
-			$tpl->url = urlencode("/");
+			// Check if modal version of GDPR form is used
+			// then redirect to current page
+			if($this->modules->isInstalled("ConsentModalGDPR")) {
+				$tpl->url = urlencode($_SERVER['REQUEST_URI']);
+			} else {
+				$tpl->url = urlencode("/");
+			}
 		}
 
 		return $tpl->render();
